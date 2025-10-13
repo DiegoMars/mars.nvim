@@ -1,6 +1,18 @@
+-- Should probably go through this and make a better job of cleaning it up
+
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
+    {
+      "folke/lazydev.nvim",
+      opts = {
+        library = {
+          -- See the configuration section for more details
+          -- Load luvit types when the `vim.uv` word is found
+          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        },
+      },
+    },
     { 'mason-org/mason.nvim', opts = {} },
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -56,18 +68,17 @@ return {
         --  the definition of its *type*, not where it was *defined*.
         map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
-        -- -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-        -- ---@param client vim.lsp.Client
-        -- ---@param method vim.lsp.protocol.Method
-        -- ---@param bufnr? integer some lsp support methods only in specific files
-        -- ---@return boolean
-        -- local function client_supports_method(client, method, bufnr)
-        --   if vim.fn.has 'nvim-0.11' == 1 then
-        --     return client:supports_method(method, bufnr)
-        --   else
-        --     return client.supports_method(method, { bufnr = bufnr })
-        --   end
-        -- end
+        ---@param client vim.lsp.Client
+        ---@param method vim.lsp.protocol.Method
+        ---@param bufnr? integer some lsp support methods only in specific files
+        ---@return boolean
+        local function client_supports_method(client, method, bufnr)
+          if vim.fn.has 'nvim-0.11' == 1 then
+            return client:supports_method(method, bufnr)
+          else
+            return client.supports_method(method, { bufnr = bufnr })
+          end
+        end
 
         -- The following two autocommands are used to highlight references of the
         -- word under your cursor when your cursor rests there for a little while.
@@ -147,9 +158,22 @@ return {
     --  - settings (table): Override the default settings passed when initializing the server.
     local servers = {
       pylsp = {}, -- For python, requires python to be installed by administer
-      -- astro = {},
       rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+      lua_ls = {
+        -- cmd = { ... },
+        -- filetypes = { ... },
+        -- capabilities = {},
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = 'Replace',
+            },
+            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+            -- diagnostics = { disable = { 'missing-fields' } },
+          },
+        },
+      },
     }
 
     -- To check the current status of installed tools and/or manually install
@@ -162,9 +186,8 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      -- 'stylua', -- Used to format Lua code
-      -- 'prettier', -- Used for Astro, but is what what used for vs code
-      -- 'rustfmt',
+      'stylua', -- Used to format Lua code
+      'rustfmt',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -184,3 +207,36 @@ return {
     }
   end,
 }
+
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   group = vim.api.nvim_create_augroup('my.lsp', {}),
+--   callback = function(args)
+--     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+--     if client:supports_method('textDocument/implementation') then
+--       -- Create a keymap for vim.lsp.buf.implementation ...
+--     end
+--
+--     -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+--     if client:supports_method('textDocument/completion') then
+--       -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+--       -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+--       -- client.server_capabilities.completionProvider.triggerCharacters = chars
+--
+--       vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+--     end
+--
+--     -- Auto-format ("lint") on save.
+--     -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+--     if not client:supports_method('textDocument/willSaveWaitUntil')
+--         and client:supports_method('textDocument/formatting') then
+--       vim.api.nvim_create_autocmd('BufWritePre', {
+--         group = vim.api.nvim_create_augroup('my.lsp', {clear=false}),
+--         buffer = args.buf,
+--         callback = function()
+--           vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+--         end,
+--       })
+--     end
+--   end,
+-- })

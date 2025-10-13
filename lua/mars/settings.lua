@@ -27,7 +27,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.o.list = true
-vim.opt.listchars = { trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Show a live feed of your subsitutions
 vim.o.inccommand = 'split'
