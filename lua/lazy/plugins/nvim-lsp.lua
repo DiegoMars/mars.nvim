@@ -2,8 +2,10 @@
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
+    -- This is for LUA only, might remove in the future
     {
       "folke/lazydev.nvim",
+      ft = "lua",
       opts = {
         library = {
           -- See the configuration section for more details
@@ -136,9 +138,9 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     local servers = {
-      pylsp = {}, -- For python, requires python to be installed by administer
       rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+      oxlint = {},
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
@@ -166,7 +168,6 @@ return {
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
-      'rustfmt',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
