@@ -7,16 +7,17 @@ return {
     local harpoon = require("harpoon")
     harpoon:setup({
       settings = {
-          save_on_toggle = false,
-          sync_on_ui_close = true,
-          key = function()
-              return vim.loop.cwd()
-          end,
+        save_on_toggle = false,
+        sync_on_ui_close = true,
+        key = function()
+          return vim.loop.cwd()
+        end,
       },
     })
 
-    vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
-    vim.keymap.set("n", "<leader>he", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+    vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "[a]dd to harpoon" })
+    vim.keymap.set("n", "<leader>he", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
+      { desc = "[e]xplore to harpoon" })
 
     vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Buffer [1]" })
     vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "Buffer [2]" })

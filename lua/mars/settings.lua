@@ -3,12 +3,6 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 vim.o.relativenumber = true
 
--- Schedule runs this code wehen it has the opportunity to
--- This is to decrease start up time
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
-
 -- Save undo history
 vim.o.undofile = true
 
