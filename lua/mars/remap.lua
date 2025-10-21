@@ -13,3 +13,4 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set({'v', 'n'}, '<leader>y', '"+y', { desc = '[y]ank to cb' })
 vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = '[w]rite' })
+vim.keymap.set('i', '<C-space>', '<C-x><C-o>', { desc = 'omni-completion' })
