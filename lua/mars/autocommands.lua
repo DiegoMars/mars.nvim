@@ -7,3 +7,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Markdown
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'markdown',
+  callback = function()
+    vim.keymap.set('n', '<leader>r', ':MarkdownPreview<CR>', { buffer = true, desc = '[R]un Markdown' })
+  end,
+})
