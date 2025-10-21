@@ -34,3 +34,7 @@ vim.opt.colorcolumn = "100"
 
 -- Already shown in mini.nvim
 vim.o.showmode = false
+
+vim.opt.swapfile = false
+
+vim.o.confirm = true
