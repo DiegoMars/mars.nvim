@@ -11,6 +11,7 @@ return {
       -- Small helper: open a horizontal split terminal and run a command
       local function term(cmd)
         vim.cmd("split | terminal " .. cmd)
+        vim.cmd("startinsert")
       end
 
       -- 1) Compile (no tests) -> like your “build” button
@@ -29,17 +30,17 @@ return {
         term(cmd)
       end, { buffer = true, desc = "[r]run [p]ackage (skip tests)" })
 
-      -- vim.keymap.set("n", "<leader>rr", function()
-      --   local main = vim.b.java_main_class
-      --   if not main or main == "" then
-      --     main = vim.fn.input("Fully-qualified main class (e.g. com.example.App): ")
-      --     if main == "" then return end
-      --     vim.b.java_main_class = main
-      --   end
-      --   -- Ensure classes are compiled, then run
-      --   local cmd = string.format('%s -q compile exec:java -Dexec.mainClass="%s"', "mvn", main)
-      --   term(cmd)
-      -- end, { buffer = true, desc = "[r]run [r]un (exec:java)" })
+      vim.keymap.set("n", "<leader>rr", function()
+        local main = vim.b.java_main_class
+        if not main or main == "" then
+          main = vim.fn.input("Fully-qualified main class (e.g. com.example.App): ")
+          if main == "" then return end
+          vim.b.java_main_class = main
+        end
+        -- Ensure classes are compiled, then run
+        local cmd = string.format('mvn -q compile exec:java -Dexec.mainClass="%s"', main)
+        term(cmd)
+      end, { buffer = true, desc = "[r]run [r]un (exec:java)" })
     end,
 })
 }

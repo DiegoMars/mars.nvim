@@ -38,3 +38,11 @@ vim.o.showmode = false
 vim.opt.swapfile = false
 
 vim.o.confirm = true
+
+-- Clipboard
+vim.schedule(function()
+  vim.o.clipboard = 'unnamedplus'
+end)
+
+vim.opt.wrap = false                               -- Don't wrap lines
+vim.opt.autoread = true                            -- Auto reload files changed outside vim
