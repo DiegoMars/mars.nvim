@@ -5,7 +5,7 @@ return {
     pattern = "java",
     callback = function()
       require("which-key").add({
-        { "<leader>r", group = "[r]un java"}
+        { "<leader>r", group = "[r]un java" }
       })
 
       -- Small helper: open a horizontal split terminal and run a command
@@ -31,16 +31,23 @@ return {
       end, { buffer = true, desc = "[r]run [p]ackage (skip tests)" })
 
       vim.keymap.set("n", "<leader>rr", function()
-        local main = vim.b.java_main_class
-        if not main or main == "" then
-          main = vim.fn.input("Fully-qualified main class (e.g. com.example.App): ")
-          if main == "" then return end
-          vim.b.java_main_class = main
+        -- derive FQCN: <package>.<Filename>
+        local fname = vim.fn.expand("%:t:r")
+        -- scan the first ~50 lines for `package ...;`
+        local lines = vim.api.nvim_buf_get_lines(0, 0, math.min(50, vim.api.nvim_buf_line_count(0)), false)
+        local pkg
+        for _, l in ipairs(lines) do
+          local m = l:match("^%s*package%s+([%w_%.]+)%s*;")
+          if m then
+            pkg = m
+            break
+          end
         end
-        -- Ensure classes are compiled, then run
-        local cmd = string.format('mvn -q compile exec:java -Dexec.mainClass="%s"', main)
-        term(cmd)
-      end, { buffer = true, desc = "[r]run [r]un (exec:java)" })
+        local main = pkg and (pkg .. "." .. fname) or fname
+
+        -- compile + run via exec:java
+        term(string.format('mvn -q compile exec:java -Dexec.mainClass="%s"', main))
+      end, { buffer = true, desc = "[r]un: [r]un main (auto FQCN)" })
     end,
-})
+  })
 }
