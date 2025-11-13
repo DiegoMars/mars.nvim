@@ -142,7 +142,8 @@ return {
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       astro = {},
       jdtls = {},
-      eslint ={}, -- Reminder that you need to add the npm eslint package to the project first
+      eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
+      ts_ls = {},
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
