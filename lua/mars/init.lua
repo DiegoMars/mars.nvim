@@ -1,6 +1,7 @@
 require("mars.remap")
 require("mars.settings")
 require("mars.autocommands")
+require("mars.floatterm")
 require("mars.langSettings")
 require("mars.usercommands")
 require("mars.languages.init")
