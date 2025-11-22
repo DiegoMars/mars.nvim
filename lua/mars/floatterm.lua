@@ -51,7 +51,8 @@ function M.toggle()
 	-- If buffer doesn't exist or is invalid, create new terminal
 	if not is_buf_valid(state.buf) then
 		state.buf = vim.api.nvim_create_buf(false, true)
-		vim.api.nvim_buf_set_option(state.buf, "bufhidden", "hide")
+		-- vim.api.nvim_buf_set_option(state.buf, "bufhidden", "hide")
+		vim.api.nvim_set_option_value("bufhidden", "hide", {buf = state.buf })
 	end
 
 	-- Create window and show buffer
@@ -73,6 +74,5 @@ end
 -- Setup keymaps
 vim.keymap.set("n", "<leader>t", M.toggle, { desc = "Toggle floating terminal", silent = true })
 vim.keymap.set("t", "<esc><esc>", M.toggle, { desc = "Toggle floating terminal", silent = true })
-vim.keymap.set("i", "<leader>t", M.toggle, { desc = "Toggle floating terminal", silent = true })
 
 return M
