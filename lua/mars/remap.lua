@@ -30,3 +30,4 @@ vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" 
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 vim.keymap.set("v", "<leader>s", ":s/", { desc = "[s]ubstitute" })
+vim.keymap.set("n", "<leader>y", ":%y<CR>", { desc = "[y]ank page" })
