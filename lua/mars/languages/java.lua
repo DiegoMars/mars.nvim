@@ -21,7 +21,7 @@ return {
       end, { buffer = true, desc = "[r]un [c]ompile (skip tests)" })
 
       vim.keymap.set("n", "<leader>rt", function()
-        local cmd = "mvn test"
+        local cmd = "mvn -q test"
         term(cmd)
       end, { buffer = true, desc = "[r]un [t]est" })
 
