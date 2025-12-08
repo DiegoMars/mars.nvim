@@ -33,6 +33,12 @@ return {-- Fuzzy Finder (files, lsp, etc)
           hidden = true
         }
       },
+      defaults = {
+        file_ignore_patterns = {
+          '^node_modules/', -- Ignores node_modules directories
+          '%.git/',        -- Ignores .git directories
+        },
+      },
     }
 
     -- Enable Telescope extensions if they are installed
