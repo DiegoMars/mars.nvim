@@ -102,12 +102,12 @@ return {
 
   Group.new("Identifier",     colors.fg,        nil)
   Group.new("Function",       colors.teal,      nil,              styles.bold)
+  Group.new("Keyword",        colors.iris,      nil,              styles.bold)
   Group.new("Statement",      colors.crimson_dark, nil)
   Group.new("Conditional",    colors.crimson_dark, nil)
   Group.new("Repeat",         colors.crimson_dark, nil)
   Group.new("Label",          colors.rust,      nil)
   Group.new("Operator",       colors.rust,      nil)
-  Group.new("Keyword",        colors.iris,      nil,              styles.bold)
   Group.new("Exception",      colors.crimson_dark, nil)
 
   Group.new("PreProc",        colors.iris,      nil)
@@ -116,10 +116,10 @@ return {
   Group.new("Macro",          colors.iris,      nil,              styles.bold)
   Group.new("PreCondit",      colors.iris,      nil)
 
-  Group.new("Type",           colors.iris,      nil)
-  Group.new("StorageClass",   colors.iris,      nil)
-  Group.new("Structure",      colors.iris,      nil)
-  Group.new("Typedef",        colors.iris,      nil)
+  Group.new("Type",           colors.crimson, nil)
+  Group.new("StorageClass",   colors.crimson_dark, nil)
+  Group.new("Structure",      colors.crimson, nil)
+  Group.new("Typedef",        colors.crimson, nil)
 
   Group.new("Constant",       colors.amber,     nil)
   Group.new("String",         colors.sage,      nil)
@@ -199,10 +199,10 @@ return {
   Group.new("@variable",       groups.Identifier)
   Group.new("@variable.builtin",colors.crimson, nil, styles.bold)
 
-  Group.new("@type",           groups.Type)
-  Group.new("@type.builtin",   colors.iris:light(), nil, styles.bold)
-  Group.new("@keyword",        groups.Keyword)
-  Group.new("@keyword.function",colors.crimson_dark, nil, styles.bold)
+  Group.new("@type",             colors.crimson, nil)
+  Group.new("@type.builtin",     colors.crimson_dark, nil, styles.bold)
+  Group.new("@keyword",          colors.iris, nil, styles.bold)
+  Group.new("@keyword.function", colors.crimson_dark, nil, styles.bold)
 
   -----------------------------------------------------------------------
   -- Markdown / inline code
@@ -233,6 +233,41 @@ return {
 
   -- Wild menu
   Group.new("WildMenu",        colors.bg,        colors.crimson, styles.bold)
+
+  -----------------------------------------------------------------------
+  -- LSP Semantic Token Overrides (Java-focused)
+  -----------------------------------------------------------------------
+  -- LSP modifiers like `public`, `private`, `static` = purple
+  Group.new("@lsp.type.modifier",      colors.iris, nil, styles.bold)
+  Group.new("@lsp.type.modifier.java", colors.iris, nil, styles.bold)
+
+  -- Keywords (public, class, static, return...)
+  Group.new("@lsp.type.keyword",          colors.iris, nil, styles.bold)
+  Group.new("@lsp.type.keyword.java",     colors.iris, nil, styles.bold)
+  Group.new("@lsp.modifier",              colors.iris, nil)
+  Group.new("@lsp.modifier.java",         colors.iris, nil)
+
+  -- Types (BSTExercises, Integer, String, int...) = red
+  Group.new("@lsp.type.class",            colors.crimson, nil)
+  Group.new("@lsp.type.class.java",       colors.crimson, nil)
+  Group.new("@lsp.type.interface",        colors.crimson, nil)
+  Group.new("@lsp.type.interface.java",   colors.crimson, nil)
+  Group.new("@lsp.type.enum",             colors.crimson, nil)
+  Group.new("@lsp.type.enum.java",        colors.crimson, nil)
+  Group.new("@lsp.type.type",             colors.crimson, nil)
+  Group.new("@lsp.type.type.java",        colors.crimson, nil)
+
+  -- Functions / methods = teal
+  Group.new("@lsp.type.method",           colors.teal, nil, styles.bold)
+  Group.new("@lsp.type.method.java",      colors.teal, nil, styles.bold)
+  Group.new("@lsp.type.function",         colors.teal, nil, styles.bold)
+  Group.new("@lsp.type.function.java",    colors.teal, nil, styles.bold)
+
+  -- Variables / fields
+  Group.new("@lsp.type.variable",         colors.fg, nil)
+  Group.new("@lsp.type.variable.java",    colors.fg, nil)
+  Group.new("@lsp.type.property",         colors.fg_dim, nil)
+  Group.new("@lsp.type.property.java",    colors.fg_dim, nil)
 
   -----------------------------------------------------------------------
   -- End
