@@ -83,9 +83,9 @@ return {
   Group.new("VisualNOS",      nil,             colors.selection)
   Group.new("MatchParen",     colors.crimson,   colors.bg_dim,    styles.bold)
 
-  Group.new("Search",         colors.bg,        colors.crimson_dark)
-  Group.new("IncSearch",      colors.bg,        colors.rust,      styles.bold)
-  Group.new("CurSearch",      groups.IncSearch)
+  Group.new("Search",         colors.fg,        colors.crimson_dark)
+  Group.new("IncSearch",      colors.bg,        colors.amber,     styles.bold)
+  Group.new("CurSearch",      colors.bg,        colors.amber,     styles.bold + styles.underline)
 
   Group.new("Folded",         colors.fg_muted,  colors.bg_dim)
   Group.new("FoldColumn",     colors.gutter,    colors.bg)
@@ -203,6 +203,18 @@ return {
   Group.new("@type.builtin",   colors.iris:light(), nil, styles.bold)
   Group.new("@keyword",        groups.Keyword)
   Group.new("@keyword.function",colors.crimson_dark, nil, styles.bold)
+
+  -----------------------------------------------------------------------
+  -- Markdown / inline code
+  -----------------------------------------------------------------------
+  -- Built-in markdown HL group
+  Group.new("markdownInlineCode", groups.String)
+
+  -- Treesitter text/markup groups for inline code
+  Group.new("@text.literal",                    groups.String)
+  Group.new("@text.literal.markdown_inline",    groups.String)
+  Group.new("@markup.raw",                      groups.String)
+  Group.new("@markup.raw.markdown_inline",      groups.String)
 
   -----------------------------------------------------------------------
   -- Misc / Neovim UI niceties
