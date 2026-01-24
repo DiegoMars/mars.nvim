@@ -144,6 +144,7 @@ return {
       jdtls = {},
       eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
       ts_ls = {},
+      clangd = {},
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
