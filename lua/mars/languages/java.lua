@@ -4,6 +4,10 @@ return {
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "java",
     callback = function()
+      vim.opt_local.tabstop = 4
+      vim.opt_local.shiftwidth = 4
+      vim.opt_local.expandtab = true
+
       require("which-key").add({
         { "<leader>r", group = "[r]un java" }
       })
@@ -48,6 +52,13 @@ return {
         -- compile + run via exec:java
         term(string.format('mvn -q compile exec:java -Dexec.mainClass="%s"', main))
       end, { buffer = true, desc = "[r]un: [r]un main (auto FQCN)" })
+
+      vim.keymap.set("n", "<leader>rj", function()
+        local file = vim.fn.expand("%:t")
+        local fileName = vim.fn.expand("%:t:r")
+        local cmd = "javac " .. file .. " && " .. " java " .. fileName
+        term(cmd)
+      end, { buffer = true, desc = "[r]un: java" })
     end,
   })
 }
