@@ -145,6 +145,7 @@ return {
       eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
       ts_ls = {},
       clangd = {},
+      basedpyright = {},
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
