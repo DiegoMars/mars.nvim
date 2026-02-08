@@ -58,7 +58,7 @@ return {
         local fileName = vim.fn.expand("%:t:r")
         local cmd = "javac " .. file .. " && " .. " java " .. fileName
         term(cmd)
-      end, { buffer = true, desc = "[r]un: java" })
+      end, { buffer = true, desc = "[r]un: [j]ava" })
     end,
   })
 }

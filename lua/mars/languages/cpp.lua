@@ -43,6 +43,10 @@ return {
   vim.api.nvim_create_autocmd("FileType", {
     pattern = { "c", "cpp", "h", "hpp" },
     callback = function()
+      vim.opt_local.tabstop = 4
+      vim.opt_local.shiftwidth = 4
+      vim.opt_local.expandtab = true
+
       require("which-key").add({
         { "<leader>r", group = "[r]un cpp" }
       })
