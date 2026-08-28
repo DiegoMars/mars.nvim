@@ -138,28 +138,53 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     local servers = {
-      rust_analyzer = {},
-      -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-      astro = {},
-      jdtls = {},
-      eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
-      ts_ls = {},
-      clangd = {},
-      basedpyright = {},
-      lua_ls = {
-        -- cmd = { ... },
-        -- filetypes = { ... },
-        -- capabilities = {},
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
+      --## See if you can add these servers in an autocommand to no install straight away ##--
+      -- rust_analyzer = {},
+      -- -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+      -- astro = {},
+      -- jdtls = {},
+      -- eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
+      -- ts_ls = {},
+      -- clangd = {},
+      -- basedpyright = {},
+      stylua = {}, -- Used to format Lua code
+
+          -- Special Lua Config, as recommended by neovim help docs
+          lua_ls = {
+            on_init = function(client)
+              client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
+
+              if client.workspace_folders then
+                local path = client.workspace_folders[1].name
+                if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
+              end
+
+              local current_settings = client.config.settings --[[@as lspconfig.settings.lua_ls]]
+              client.config.settings.Lua = vim.tbl_deep_extend('force', current_settings.Lua, {
+                runtime = {
+                  version = 'LuaJIT',
+                  path = { 'lua/?.lua', 'lua/?/init.lua' },
+                },
+                workspace = {
+                  checkThirdParty = false,
+                  -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+                  --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+                  library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
+                    '${3rd}/luv/library',
+                    '${3rd}/busted/library',
+                  }),
+                  library = vim.api.nvim_get_runtime_file('', true),
+                },
+              })
+            end,
+            ---@type lspconfig.settings.lua_ls
+            settings = {
+              Lua = {
+                format = { enable = false }, -- Disable formatting (formatting is done by stylua)
+              },
             },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
           },
-        },
-      },
+        }
     }
 
     -- To check the current status of installed tools and/or manually install
