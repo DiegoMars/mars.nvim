@@ -74,11 +74,7 @@ return {
         ---@param bufnr? integer some lsp support methods only in specific files
         ---@return boolean
         local function client_supports_method(client, method, bufnr)
-          if vim.fn.has 'nvim-0.11' == 1 then
-            return client:supports_method(method, bufnr)
-          else
-            return client.supports_method(method, { bufnr = bufnr })
-          end
+          return client:supports_method(method, bufnr)
         end
         local client = vim.lsp.get_client_by_id(event.data.client_id)
 
@@ -192,8 +188,8 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code
-      'prettier', -- For astro
+      -- 'stylua', -- Used to format Lua code
+      -- 'prettier', -- For astro
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
