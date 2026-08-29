@@ -1,12 +1,11 @@
 -- Lil set up for Java
--- Eventually will setup LSP here too
 return {
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "java",
     callback = function()
-      vim.o_local.tabstop = 4
-      vim.o_local.shiftwidth = 4
-      vim.o_local.expandtab = true
+      vim.vim.bo[bufnr].tabstop = 4
+      vim.vim.bo[bufnr].shiftwidth = 4
+      vim.vim.bo[bufnr].expandtab = true
 
       require("which-key").add({
         { "<leader>r", group = "[r]un java" }
