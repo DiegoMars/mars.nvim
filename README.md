@@ -42,7 +42,7 @@
 
   ```
     sudo apt update
-    sudo apt install make gcc ripgrep unzip git xclip curl tree-sitter-cli
+    sudo apt install make gcc ripgrep fd-find tree-sitter-cli unzip git xclip curl
 
     # Now we install nvim
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
