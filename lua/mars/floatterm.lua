@@ -63,7 +63,7 @@ function M.toggle()
 	if line_count == 1 then
 		local first_line = vim.api.nvim_buf_get_lines(state.buf, 0, 1, false)[1]
 		if first_line == "" then
-			vim.fn.termopen(vim.o.shell)
+			vim.fn.jobstart(vim.o.shell, { term = true })
 		end
 	end
 

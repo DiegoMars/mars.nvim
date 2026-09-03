@@ -1,8 +1,6 @@
--- Should probably go through this and make a better job of cleaning it up
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- This is for LUA only, might remove in the future
     {
       "folke/lazydev.nvim",
       ft = "lua",
@@ -14,7 +12,14 @@ return {
         },
       },
     },
-    { 'mason-org/mason.nvim', opts = {} },
+    { 'mason-org/mason.nvim',
+      opts = {
+        registries = {
+            "github:mason-org/mason-registry",
+            "github:Crashdummyy/mason-registry",
+        },
+      }
+    },
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -65,8 +70,6 @@ return {
         map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
 
         -- Jump to the type of the word under your cursor.
-        --  Useful when you're not sure what type a variable is and you want to see
-        --  the definition of its *type*, not where it was *defined*.
         map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
         ---@param client vim.lsp.Client
@@ -74,18 +77,12 @@ return {
         ---@param bufnr? integer some lsp support methods only in specific files
         ---@return boolean
         local function client_supports_method(client, method, bufnr)
-          if vim.fn.has 'nvim-0.11' == 1 then
-            return client:supports_method(method, bufnr)
-          else
-            return client.supports_method(method, { bufnr = bufnr })
-          end
+          return client:supports_method(method, bufnr)
         end
         local client = vim.lsp.get_client_by_id(event.data.client_id)
 
         -- The following code creates a keymap to toggle inlay hints in your
         -- code, if the language server you are using supports them
-        --
-        -- This may be unwanted, since they displace some of your code
         -- if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
         --   map('<leader>th', function()
         --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
@@ -138,25 +135,37 @@ return {
     --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     --  - settings (table): Override the default settings passed when initializing the server.
     local servers = {
-      rust_analyzer = {},
-      -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-      astro = {},
-      jdtls = {},
-      eslint = {}, -- Reminder that you need to add the npm eslint package to the project first
-      ts_ls = {},
-      clangd = {},
-      basedpyright = {},
+      -- -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
+
+      stylua = {}, -- Used to format Lua code
+      -- Special Lua Config, as recommended by neovim help docs
       lua_ls = {
-        -- cmd = { ... },
-        -- filetypes = { ... },
-        -- capabilities = {},
+        on_init = function(client)
+          client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
+
+          if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
+          end
+
+          local current_settings = client.config.settings --[[@as lspconfig.settings.lua_ls]]
+          client.config.settings.Lua = vim.tbl_deep_extend('force', current_settings.Lua, {
+            runtime = {
+              version = 'LuaJIT',
+              path = { 'lua/?.lua', 'lua/?/init.lua' },
+            },
+            workspace = {
+              checkThirdParty = false,
+              -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+              --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+              library = vim.api.nvim_get_runtime_file('', true),
+            },
+          })
+        end,
+        ---@type lspconfig.settings.lua_ls
         settings = {
           Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
+            format = { enable = false }, -- Disable formatting (formatting is done by stylua)
           },
         },
       },
@@ -165,21 +174,20 @@ return {
     -- To check the current status of installed tools and/or manually install
     -- other tools, you can run
     --    :Mason
-    --
-    -- You can press `g?` for help in this menu.
-    --
-    -- You can add other tools here that you want Mason to install
-    -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
-      'prettier', -- For astro
+      -- 'prettier', -- For astro
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+    -- For my different language files logic
+    servers = vim.tbl_extend('force', servers, require('mars.languages').collect_servers())
+
     require('mason-lspconfig').setup {
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      ensure_installed = {}, -- explicitly set to an empty table (installs via mason-tool-installer)
       automatic_installation = false,
+      automatic_enable = false,
       handlers = {
         function(server_name)
           local server = servers[server_name] or {}
@@ -187,9 +195,12 @@ return {
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
+          vim.lsp.config(server_name, server)
+          vim.lsp.enable(server_name)
         end,
       },
     }
+
+    require('mars.languages').setup(capabilities)
   end,
 }

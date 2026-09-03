@@ -21,7 +21,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.listchars = "tab:» ,trail:·,nbsp:␣"
 
 -- Show a live feed of your subsitutions
 vim.o.inccommand = 'split'
@@ -30,12 +30,12 @@ vim.o.cursorline = true
 
 vim.o.scrolloff = 10
 
-vim.opt.colorcolumn = "100"
+vim.o.colorcolumn = "100"
 
 -- Already shown in mini.nvim
 vim.o.showmode = false
 
-vim.opt.swapfile = false
+vim.o.swapfile = false
 
 vim.o.confirm = true
 
@@ -44,5 +44,5 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
-vim.opt.wrap = true                               -- Wrap lines
-vim.opt.autoread = true                            -- Auto reload files changed outside vim
+vim.o.wrap = true                               -- Wrap lines
+vim.o.autoread = true                            -- Auto reload files changed outside vim
