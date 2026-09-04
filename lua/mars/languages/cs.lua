@@ -1,11 +1,18 @@
 -- This is for C#
--- need to install dotnet for this to work
+-- need to install dotnet and roslyn_ls for this to work
 return {
   name = 'CS',
   filetypes = { 'cs' },
-  mason_tools = { 'roslyn-language-server' },
+  mason_tools = {},
   servers = {
-    roslyn_ls = {},
+    roslyn_ls = {
+      cmd = {
+        'roslyn-language-server',
+        '--logLevel', 'Information',
+        '--extensionLogDirectory', vim.fs.joinpath(vim.uv.os_tmpdir(), 'roslyn_ls', 'logs'),
+        '--stdio',
+      },
+    },
   },
   on_filetype = function(bufnr)
     -- Optional. Runs once per matching buffer: buffer-local options, keymaps, etc.
@@ -17,3 +24,6 @@ return {
 --
 -- For linux, do:
 -- `sudo pacman -S dotnet-sdk`
+--
+-- Afterwards, install roslyn using:
+-- `dotnet tool install -g roslyn-language-server --prerelease --source https://pkgs.dev.azure.com/azure-public/vside/_packaging/vs-impl/nuget/v3/index.json`
