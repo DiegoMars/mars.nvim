@@ -30,9 +30,22 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Example code for implementing external libraries
+# include(FetchContent)
+
+# FetchContent_Declare(
+#   fmt
+#   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+#   GIT_TAG 10.2.1
+# )
+#
+# FetchContent_MakeAvailable(fmt json)
+
 add_executable(%s
     src/main.cpp
 )
+
+# target_link_libraries(mediator_cpp PRIVATE fmt::fmt)
 ]], proj, proj)
     vim.fn.writefile(vim.split(cmake, '\n'), 'CMakeLists.txt')
   end
@@ -81,7 +94,7 @@ return {
 
     local function exe_path()
       local name = is_windows and (project_name() .. '.exe') or project_name()
-      return is_windows and ('build\\' .. name) or ('./build/' .. name)
+      return is_windows and ('build\\debug\\' .. name) or ('./build/' .. name)
     end
 
     local function term(cmd)
@@ -111,8 +124,9 @@ return {
       if has_cmake() then term('cmake --build build && ' .. exe_path()) else compile_single_file(true) end
     end, { buffer = bufnr, desc = '[r]un' })
 
-    vim.keymap.set('n', '<leader>rt', function()
-      term('ctest --test-dir build')
-    end, { buffer = bufnr, desc = '[t]est' })
+    -- Will implement later
+    -- vim.keymap.set('n', '<leader>rt', function()
+    --   term('ctest --test-dir build')
+    -- end, { buffer = bufnr, desc = '[t]est' })
   end,
 }
