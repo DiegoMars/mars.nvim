@@ -1,8 +1,8 @@
 # Set up files for:
-- [ ] java
+- [X] java
 - [ ] markdown
 - [ ] cpp
-- [ ] python
+- [X] python
 - [ ] astro
 - [ ] rust
 
