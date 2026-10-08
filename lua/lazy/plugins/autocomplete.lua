@@ -1,0 +1,31 @@
+-- Do plan on commenting all this out, so you have to manually enable it
+return { }
+-- return {
+--   'saghen/blink.cmp',
+--   version = "1.*",
+--   dependencies = {
+--     {
+--       'L3MON4D3/LuaSnip',
+--       version = '2.*'
+--     }
+--   },
+--   opts = {
+--     keymap = { preset = 'default' },
+--     appearance = {
+--       nerd_font_variant = 'mono',
+--     },
+--     completion = {
+--       -- By default, you may press `<c-space>` to show the documentation.
+--       documentation = { auto_show = false, auto_show_delay_ms = 500 },
+--     },
+--     sources = {
+--       default = { 'lsp', 'path', 'snippets' },
+--     },
+--     snippets = { preset = 'luasnip' },
+--
+--     -- See `:help blink-cmp-config-fuzzy` for more information
+--     -- Need to download the prebuilt binary and put it in the correct place
+--     fuzzy = { implementation = 'prefer_rust_with_warning' },
+--     signature = { enabled = true },
+--   },
+-- }

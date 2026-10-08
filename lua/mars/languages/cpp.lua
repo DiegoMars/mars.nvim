@@ -1,5 +1,10 @@
+-- #### NEED TO UPDATE THIS ####
 -- need java, cmake, and clang installed
 -- windows installation of clang can be done through LLVM using `choco install llvm`
+-- Need to work with implementing ninja or some other build tool, because vs is weird
+-- using vcpkg for external libraries. For windows, install in C:\tools folder
+-- Learn more about vcpkg and cmake here:
+--   https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-powershell
 
 local function project_name()
   return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
@@ -20,6 +25,8 @@ end
 local function scaffold_project()
   vim.fn.mkdir('src', 'p') -- Don't error if folder already exists
 
+  -- currently, this puts the binaries into the project folder
+  -- want to look into installing them in the system's files instead
   if vim.fn.filereadable('CMakeLists.txt') == 0 then
     local proj = project_name()
     local cmake = string.format([[
@@ -94,11 +101,11 @@ return {
 
     local function exe_path()
       local name = is_windows and (project_name() .. '.exe') or project_name()
-      return is_windows and ('build\\debug\\' .. name) or ('./build/' .. name)
+      return is_windows and ('build\\' .. name) or ('./build/' .. name)
     end
 
     local function term(cmd)
-      vim.cmd('split | terminal ' .. cmd)
+      vim.cmd('10split | terminal ' .. cmd)
       vim.cmd('startinsert')
     end
 
@@ -113,7 +120,7 @@ return {
 
     vim.keymap.set('n', '<leader>rc', function()
       vim.fn.mkdir('build', 'p')
-      term('cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON')
+      term('cmake --preset=default -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=ON')
     end, { buffer = bufnr, desc = '[c]make configure' })
 
     vim.keymap.set('n', '<leader>rb', function()

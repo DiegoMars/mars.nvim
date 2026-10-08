@@ -83,11 +83,17 @@ return {
 
         -- The following code creates a keymap to toggle inlay hints in your
         -- code, if the language server you are using supports them
-        -- if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-        --   map('<leader>th', function()
-        --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-        --   end, '[T]oggle Inlay [H]ints')
-        -- end
+        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          vim.api.nvim_create_user_command(
+            'TH', -- Toggle Hints
+            function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end,
+            {
+              desc = 'Toggle Inlay Hints'
+            }
+          )
+        end
 
         -- -- This is from :help lsp
         -- -- This formats code according to the lsp when saving

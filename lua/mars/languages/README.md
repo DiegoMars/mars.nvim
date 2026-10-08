@@ -5,6 +5,7 @@
 - [ ] python
 - [ ] astro
 - [ ] rust
+- [X] c#
 
 ## Example code
 ```
