@@ -2,7 +2,7 @@
 - [X] java
 - [ ] markdown
 - [ ] cpp
-- [ ] python
+- [X] python
 - [ ] astro
 - [ ] rust
 - [X] c#
