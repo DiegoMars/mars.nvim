@@ -6,6 +6,7 @@
 - [ ] astro
 - [ ] rust
 - [X] c#
+- [X] Go
 
 ## Example code
 ```
